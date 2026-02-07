@@ -349,7 +349,8 @@
     border-radius: 10px;
     text-align: left;
 }
-//Search bar from the SearchMedication page
+/*Search bar from the SearchMedication page*/
+
 .search-container {
    .search-container {
     display: flex;
@@ -529,4 +530,5 @@
     .medication-list-container {
         width: 90%;
     }
+}
 }
