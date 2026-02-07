@@ -30,7 +30,7 @@ def search_by_effect(effect):
 
 @app.route('/api/drugs')
 def get_all_drugs():
-    drugs = collection.find({}, {"drug_name": 1, "effect_count": 1, "_id": 0}).limit(100)
+    drugs = collection.find({}, {"drug_name": 1, "effect_count": 1, "_id": 0}).limit(500)
     return jsonify(list(drugs))
 
 if __name__ == '__main__':
