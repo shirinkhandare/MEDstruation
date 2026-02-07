@@ -67,7 +67,7 @@ for file_num, filename in enumerate(files, 1):
                         drug_effects[name.upper()].add(reaction)  
 
 # print final count on new line
-print(f"\rReading files... Complete! {len(drug_effects)} drugs found")
+# print(f"\rReading files... Complete! {len(drug_effects)} drugs found")
 
 # have to convert set to list to support json files
 drug_effects_dict = {
@@ -80,4 +80,5 @@ with open("drug_menstrual_effects.json", "w", encoding="utf-8") as f: # save jso
     json.dump(drug_effects_dict, f, indent=2) # save the dictionary in f
 
 # Print final summary
-print(f"Data saved!")
+# print(f"Data saved!")
+print(json.dumps(drug_effects_dict))
