@@ -76,7 +76,6 @@
         width: 150px;
     }
 
-
     .header button{
         display: flex;
         align-items: center;
@@ -122,14 +121,11 @@
         height: 40px;
         transition: 0.2s;
     }
-
     .date:hover,
     .date.active{
         color: #fff;
-        background: #ff5869
-        
+        background: #ff5869  
     }
-
     .date.inactive{
         color: #d2d2d2;
     }
@@ -137,7 +133,6 @@
     .date.inactive:hover{
         color: #fff;
     }
-
 
     .modal-overlay{
         margin-right: auto;
@@ -161,5 +156,25 @@
         border-radius: 15px;
         text-align: center;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .date.has-log {
+    position: relative;
+    }
+
+    .date.has-log::after {
+        content: '';
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: #ff5869;
+        border-radius: 50%;
+    }
+
+    .date.has-log.active::after {
+        background: #fff;
     }
     
