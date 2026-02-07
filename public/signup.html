@@ -2,18 +2,25 @@
 <html>
 <head>
     <title>Test Signup</title>
+    <link rel="stylesheet" href="card.css">
+     <h1 class = "format"> MEDstruation </h1>
+    <h2 class style="color: white;"> Signup Page </h1>
 </head>
 <body>
-    <h1>Test Signup Page</h1>
     <div id="error" style="color: red;"></div>
     <div id="success" style="color: green;"></div>
     <form id="signupForm">
+        
+        <label for="email" style="color: white;"> Enter Username: </label>
         <input type="text" id="username" placeholder="Username" required minlength="3"><br><br>
+        <label for="email" style="color: white;"> Enter Email: </label>
         <input type="email" id="email" placeholder="Email" required><br><br>
+        <label for="password" style="color: white;"> Enter Password: </label>
         <input type="password" id="password" placeholder="Password" required minlength="6"><br><br>
         <button type="submit">Sign Up</button>
     </form>
     <p><a href="/login">Already have an account? Login</a></p>
+
 
     <script>
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
