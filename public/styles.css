@@ -350,8 +350,8 @@
     text-align: left;
 }
 /*Search bar from the SearchMedication page*/
+
 .search-container {
-   .search-container {
     display: flex;
     align-items: center;
     gap: 1.5vw;
