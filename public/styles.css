@@ -8,13 +8,13 @@
     
 
     body{
-        background-color: darksalmon;
+        background-color: rgba(255, 207, 207, 1);
         min-height: 100vh;
         display:flex;
         flex-direction: column;
 
     }
-    .top {
+.top {
     position: relative;
     width: 100%;
     background-color: #ff8894;
@@ -341,6 +341,13 @@
     
 /*User Display Info - from profile-page */
 
+.profile-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30 px 20px;
+    color: white;
+}
 .user-information{
     width: 40%;
     background-color: salmon;
@@ -529,5 +536,4 @@
     .medication-list-container {
         width: 90%;
     }
-}
 }
