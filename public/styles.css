@@ -296,11 +296,30 @@
 }
     
 /*User Display Info - from profile-page */
+
 .user-information{
     width: 40%;
-    background-color: #ff5869;
-    padding: 10px;
+    background-color: salmon;
+    padding: 20px;
     border: 2px solid black;
     border-radius: 10px;
     text-align: left;
+    margin: left;
+}
+
+.profile-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+    color: white;
+}
+.profile-pic{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid white;
+    object-fit: cover;
+    margin-bottom: 15px;
 }
