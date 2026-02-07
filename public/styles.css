@@ -2,7 +2,8 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
+        font-family: "Poppins", 'Times New Roman', Times, serif;
+        
     }
     
 
@@ -35,6 +36,15 @@
         right: 20px
     }
 
+    #MEDstruation{
+        position: absolute;
+        margin-top: 1%;
+        left: 50%; 
+        color: white;
+        transform: translateX(-50%)
+        
+    }
+
     .middle{
         flex: 1;
         display: flex;
@@ -50,7 +60,7 @@
         background: #fff;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0,0,0,0);
-        margin-top: 50%;
+        margin-top: 25%;
     }
 
     .header{
@@ -59,6 +69,13 @@
         align-items: center;
         padding: 10px;
     }
+
+    .monthYear{
+        text-align: center;
+        font-weight: 600;
+        width: 150px;
+    }
+
 
     .header button{
         display: flex;
@@ -84,8 +101,43 @@
         color: #999FA6;
         font-weight: 500;
     }
+
+    .dates{
+        display: grid;
+        grid-template-columns: repeat(7,1fr);
+        gap: 5px;
+    }
     
-    
+    .date{
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        margin: auto;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        transition: 0.2s;
+    }
+
+    .date:hover
+    .date.active{
+        color: #fff;
+        background: #ff5869
+        
+    }
+
+    .date.inactive{
+        color: #d2d2d2;
+    }
+
+    .date.inactive:hover{
+        color: #fff;
+    }
+
 
     .modal-overlay{
         margin-right: auto;
