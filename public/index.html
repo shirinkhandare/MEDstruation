@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title> MEDstruation </title>
         <link rel="stylesheet" href="styles.css">
+        <script src ="https://cdn.jsdelivr.net/npm/fullCalendar@6.1.8/index/global.min.js"></script>
+        <script src="script.js" defer></script>
          <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
          <link rel="preconnect" href="https://fonts.googleapis.com">
          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,20 +15,42 @@
     <body>
         <!--Header which would have the home button and profile button-->
         <div class="header">
+            <!--Button containers to be reused for every header-->
+            <div class="button container">
                 <button id="home-button" onclick=" location.href='index.html'"> Home </button>
                 <button id="profile-button" onclick =" location.href='profile-page.html'"> Profile </button>
-        </div>
-
-        <div class="middle">
-            <div class="calendar">
-
             </div>
-
         </div>
-        <div>
+        <!--Calendar and its kids-->
+        <main id="calendar-card">
+            <div class="middle"></div>
+        </main>
 
+        <div id="logModal" class="modal-overlay">
+            <div class="modal-content">
+                <h2 id="selectedDateText"> Log Date</h2>
+
+                <div class="input-group">
+                    <label> Log Period?</label>
+                    <input type="checkbox" id="periodCheck">
+                </div>
+
+                <div class="input-group">
+                    <label> Pain Level (1-10)</label>
+                    <input type="range" id="painInput" min="1" max="10">
+                    <span id="painValue"> 5 </span>
+                </div>
+
+                <div class="input-group"> 
+                    <label> Medication Taken </label>
+                    <input type="text" id="medInput" placeholder="e.g. Mili">
+                </div>
+
+                <div class="modal-actions">
+                    <button id="saveLogBtn" class="btn-save"> Save Log </button>
+                    <button class="btn-cancel" onclick="closeModel()"> Cancel</button>
+                </div>
+            </div>
         </div>
-        
-        
-
+    </body>        
 </html>
