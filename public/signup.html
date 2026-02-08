@@ -202,7 +202,10 @@
 
             // Transfer user data to session storage
             sessionStorage.setItem('currentUser', username);
-
+            sessionStorage.setItem('currentEmail',email);
+            sessionStorage.setItem('dateOfBirth', dateOfBirth);
+            sessionStorage.setItem('currentHeight',height);
+            sessionStorage.setItem('currentWeight', weight);
             // Get profile picture as base64
             let profilePicture = '';
             const fileInput = document.getElementById('profilePicture');
