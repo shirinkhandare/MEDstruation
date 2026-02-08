@@ -138,6 +138,9 @@
             const dateOfBirth = document.getElementById('dateOfBirth').value;
             const weight = document.getElementById('weight').value || null;
             const height = document.getElementById('height').value || null;
+
+            // Transfer user data to session storage
+            sessionStorage.setItem('currentUser', username);
             
             // Get profile picture as base64
             let profilePicture = '';
