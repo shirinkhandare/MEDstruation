@@ -1,88 +1,14 @@
 /*===============================================
   MEDICATION SEARCH & DOSAGE FUNCTIONALITY
+  - Connects to MongoDB database
+  - Shows only menstrual effects
+  - Displays only searched medication
 ===============================================*/
-
-// Medication data with side effects
-let medications = {
-    "Acetaminophen": "Common side effects: Nausea, stomach pain, loss of appetite, headache. Rare but serious: liver damage with high doses.",
-    "Advil": "Common side effects: Upset stomach, heartburn, nausea, headache, dizziness. May increase risk of heart attack or stroke.",
-    "Albuterol": "Common side effects: Nervousness, shaking, headache, fast heartbeat, dizziness, nausea.",
-    "Alprazolam": "Common side effects: Drowsiness, dizziness, increased saliva, memory problems. Risk of dependence.",
-    "Amitriptyline": "Common side effects: Drowsiness, dry mouth, blurred vision, constipation, weight gain, dizziness.",
-    "Amlodipine": "Common side effects: Swelling of ankles/feet, dizziness, flushing, headache, fatigue.",
-    "Amoxicillin": "Common side effects: Nausea, vomiting, diarrhea, rash, yeast infection.",
-    "Aspirin": "Common side effects: Upset stomach, heartburn, nausea. May increase bleeding risk.",
-    "Atenolol": "Common side effects: Dizziness, tiredness, cold hands/feet, slow heartbeat, nausea.",
-    "Atorvastatin": "Common side effects: Muscle pain, diarrhea, upset stomach, joint pain.",
-    "Azithromycin": "Common side effects: Nausea, diarrhea, vomiting, stomach pain, headache.",
-    "Benadryl": "Common side effects: Drowsiness, dizziness, dry mouth, constipation, blurred vision.",
-    "Bupropion": "Common side effects: Dry mouth, nausea, insomnia, headache, weight loss, increased sweating.",
-    "Cetirizine": "Common side effects: Drowsiness, dry mouth, fatigue, dizziness.",
-    "Ciprofloxacin": "Common side effects: Nausea, diarrhea, dizziness, headache. May cause tendon problems.",
-    "Citalopram": "Common side effects: Nausea, dry mouth, drowsiness, insomnia, increased sweating.",
-    "Claritin": "Common side effects: Headache, drowsiness, fatigue, dry mouth.",
-    "Cyclobenzaprine": "Common side effects: Drowsiness, dizziness, dry mouth, fatigue, blurred vision.",
-    "Diazepam": "Common side effects: Drowsiness, fatigue, muscle weakness, dizziness. Risk of dependence.",
-    "Duloxetine": "Common side effects: Nausea, dry mouth, drowsiness, fatigue, constipation, loss of appetite.",
-    "Escitalopram": "Common side effects: Nausea, drowsiness, dry mouth, increased sweating, sexual dysfunction.",
-    "Fluoxetine": "Common side effects: Nausea, headache, drowsiness, insomnia, diarrhea, sexual dysfunction.",
-    "Gabapentin": "Common side effects: Dizziness, drowsiness, fatigue, swelling in hands/feet.",
-    "Hydrochlorothiazide": "Common side effects: Dizziness, headache, increased urination, low potassium.",
-    "Ibuprofen": "Common side effects: Upset stomach, heartburn, nausea, headache, dizziness.",
-    "Levothyroxine": "Common side effects: Hair loss (temporary), weight changes, headache, nervousness.",
-    "Lisinopril": "Common side effects: Dizziness, headache, persistent dry cough, fatigue.",
-    "Loratadine": "Common side effects: Headache, drowsiness, dry mouth, fatigue.",
-    "Lorazepam": "Common side effects: Drowsiness, dizziness, weakness, unsteadiness. Risk of dependence.",
-    "Losartan": "Common side effects: Dizziness, stuffy nose, back pain, diarrhea.",
-    "Metformin": "Common side effects: Nausea, vomiting, diarrhea, stomach upset, metallic taste.",
-    "Metoprolol": "Common side effects: Dizziness, tiredness, depression, shortness of breath, slow heartbeat.",
-    "Montelukast": "Common side effects: Headache, dizziness, stomach pain, heartburn, fatigue.",
-    "Naproxen": "Common side effects: Upset stomach, heartburn, drowsiness, headache, dizziness.",
-    "Omeprazole": "Common side effects: Headache, nausea, diarrhea, stomach pain, gas.",
-    "Prednisone": "Common side effects: Increased appetite, weight gain, insomnia, mood changes, high blood sugar.",
-    "Sertraline": "Common side effects: Nausea, diarrhea, drowsiness, dry mouth, sexual dysfunction.",
-    "Simvastatin": "Common side effects: Headache, nausea, stomach pain, constipation, muscle pain.",
-    "Tramadol": "Common side effects: Dizziness, nausea, constipation, headache, drowsiness.",
-    "Trazodone": "Common side effects: Drowsiness, dizziness, dry mouth, headache, blurred vision.",
-    "Zolpidem": "Common side effects: Drowsiness, dizziness, diarrhea, grogginess. May cause sleepwalking.",
-    
-    // Birth Control & Hormones
-    "Yaz": "Common side effects: Nausea, breast tenderness, headache, mood changes, weight changes, irregular bleeding.",
-    "Yasmin": "Common side effects: Nausea, breast tenderness, headache, mood changes, weight changes.",
-    "Ortho Tri-Cyclen": "Common side effects: Nausea, breast tenderness, headache, mood swings, breakthrough bleeding.",
-    "Lo Loestrin Fe": "Common side effects: Nausea, breast tenderness, headache, mood changes, spotting between periods.",
-    "Nuvaring": "Common side effects: Vaginal irritation, discharge, headache, nausea, breast tenderness.",
-    "Mirena": "Common side effects: Irregular bleeding, headache, acne, breast tenderness, ovarian cysts.",
-    "Nexplanon": "Common side effects: Irregular bleeding, headache, weight gain, acne, mood changes.",
-    "Depo-Provera": "Common side effects: Weight gain, irregular bleeding, headache, mood changes, bone density loss.",
-    "Plan B": "Common side effects: Nausea, fatigue, headache, dizziness, breast tenderness, irregular bleeding.",
-    "Estradiol": "Common side effects: Nausea, bloating, breast tenderness, headache, mood changes.",
-    "Progesterone": "Common side effects: Drowsiness, dizziness, headache, breast tenderness, mood changes.",
-    
-    // Additional Common Medications
-    "Tylenol": "Common side effects: Nausea, stomach pain, loss of appetite, headache. Rare: liver damage with high doses.",
-    "Xanax": "Common side effects: Drowsiness, dizziness, increased saliva, memory problems. High risk of dependence.",
-    "Zoloft": "Common side effects: Nausea, diarrhea, drowsiness, dry mouth, sexual dysfunction, insomnia.",
-    "Zyrtec": "Common side effects: Drowsiness, dry mouth, fatigue, dizziness, headache.",
-    "Lexapro": "Common side effects: Nausea, insomnia, fatigue, drowsiness, sexual dysfunction, dry mouth.",
-    "Prozac": "Common side effects: Nausea, headache, drowsiness, insomnia, sexual dysfunction, dry mouth.",
-    "Wellbutrin": "Common side effects: Dry mouth, nausea, insomnia, headache, weight loss, increased sweating.",
-    "Lipitor": "Common side effects: Muscle pain, diarrhea, upset stomach, joint pain, headache.",
-    "Synthroid": "Common side effects: Hair loss (temporary), weight changes, headache, nervousness, increased sweating.",
-    "Ambien": "Common side effects: Drowsiness, dizziness, diarrhea, grogginess. May cause sleepwalking or sleep-eating.",
-    "Viagra": "Common side effects: Headache, flushing, upset stomach, stuffy nose, dizziness, vision changes.",
-    "Ozempic": "Common side effects: Nausea, vomiting, diarrhea, stomach pain, constipation, decreased appetite.",
-    "Jardiance": "Common side effects: Urinary tract infections, increased urination, yeast infections, nausea.",
-    "Symbicort": "Common side effects: Headache, throat irritation, upper respiratory infection, oral thrush."
-};
-
-// Get sorted medication names
-const medicationNames = Object.keys(medications).sort();
 
 // Dosage modal elements
 const dosageModal = document.getElementById('dosageModal');
 const selectedMedName = document.getElementById('selectedMedName');
-const sideEffectsText = document.getElementById('sideEffectsText');
+const menstrualEffectsList = document.getElementById('menstrualEffectsList');
 const dosageAmount = document.getElementById('dosageAmount');
 const dosageUnit = document.getElementById('dosageUnit');
 const dosageFrequency = document.getElementById('dosageFrequency');
@@ -92,49 +18,229 @@ const searchBtn = document.getElementById('searchBtn');
 const medicationList = document.getElementById('medicationList');
 
 let selectedMedication = null;
-let userMedications = {}; // Store user's medications locally
 
-// Display all medications
-function displayMedications(meds) {
+// Show initial message
+medicationList.innerHTML = '<p style="text-align: center; color: #666; padding: 4vh; font-size: 1.1em;">🔍 Type a medication name and press Search to see menstrual side effects</p>';
+
+// Fetch menstrual effects for a specific drug
+async function fetchMenstrualEffects(drugName) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/drug/${encodeURIComponent(drugName)}`);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                return { drug_name: drugName, menstrual_effects: [], effect_count: 0, notFound: true };
+            }
+            throw new Error('Failed to fetch menstrual effects');
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching menstrual effects:', error);
+        return { error: true, message: error.message };
+    }
+}
+
+// Display search result
+function displaySearchResult(drugData) {
     medicationList.innerHTML = '';
     
-    if (meds.length === 0) {
-        medicationList.innerHTML = '<p style="text-align: center; color: #999; padding: 2vh;">No medications found.</p>';
+    if (drugData.error) {
+        medicationList.innerHTML = `<p style="text-align: center; color: #ff5869; padding: 3vh;">❌ Error: ${drugData.message}<br><br>Make sure the server is running at http://localhost:3000</p>`;
         return;
     }
     
-    meds.forEach(med => {
-        const medItem = document.createElement('div');
-        medItem.className = 'medication-item';
-        medItem.textContent = med;
-        medItem.addEventListener('click', () => openDosageModal(med));
-        medicationList.appendChild(medItem);
-    });
+    if (drugData.notFound) {
+        medicationList.innerHTML = `
+            <div style="text-align: center; padding: 3vh;">
+                <h3 style="color: #666; margin-bottom: 2vh;">⚠️ Medication Not Found</h3>
+                <p style="color: #999;">"${drugData.drug_name}" is not in our database of ${374} medications with menstrual side effects.</p>
+                <p style="color: #999; margin-top: 1vh;">This could mean:</p>
+                <ul style="list-style: none; padding: 0; color: #999;">
+                    <li>• The medication doesn't have reported menstrual side effects</li>
+                    <li>• Try searching for the generic name instead of brand name</li>
+                    <li>• Check your spelling</li>
+                </ul>
+            </div>
+        `;
+        return;
+    }
     
-    console.log('Displayed', meds.length, 'medications');
+    // Create result card
+    const resultCard = document.createElement('div');
+    resultCard.style.cssText = `
+        background: white;
+        border: 2px solid #ff5869;
+        border-radius: 20px;
+        padding: 3vh 2vw;
+        box-shadow: 0 6px 20px rgba(255, 88, 105, 0.15);
+        max-width: 800px;
+        margin: 0 auto;
+    `;
+    
+    // Drug name header
+    const header = document.createElement('h2');
+    header.textContent = drugData.drug_name;
+    header.style.cssText = `
+        color: #ff5869;
+        margin-bottom: 2vh;
+        font-size: 2em;
+        border-bottom: 2px solid #ff5869;
+        padding-bottom: 1vh;
+    `;
+    resultCard.appendChild(header);
+    
+    // Menstrual effects section
+    if (drugData.menstrual_effects && drugData.menstrual_effects.length > 0) {
+        const effectsTitle = document.createElement('h3');
+        effectsTitle.textContent = `⚠️ Reported Menstrual Side Effects (${drugData.effect_count})`;
+        effectsTitle.style.cssText = `
+            color: #333;
+            margin-top: 2vh;
+            margin-bottom: 1.5vh;
+            font-size: 1.3em;
+        `;
+        resultCard.appendChild(effectsTitle);
+        
+        const effectsList = document.createElement('ul');
+        effectsList.style.cssText = `
+            list-style-type: disc;
+            padding-left: 3vh;
+            margin: 0;
+        `;
+        
+        drugData.menstrual_effects.forEach(effect => {
+            const li = document.createElement('li');
+            li.textContent = effect;
+            li.style.cssText = `
+                margin-bottom: 1vh;
+                color: #555;
+                font-size: 1.05em;
+                line-height: 1.6;
+            `;
+            effectsList.appendChild(li);
+        });
+        
+        resultCard.appendChild(effectsList);
+        
+        // Disclaimer
+        const disclaimer = document.createElement('p');
+        disclaimer.textContent = '📋 Note: These effects are based on adverse event reports from the FDA database and may not occur in all patients. Always consult your healthcare provider.';
+        disclaimer.style.cssText = `
+            margin-top: 2vh;
+            padding: 1.5vh;
+            background-color: #fff5f6;
+            border-left: 4px solid #ff5869;
+            color: #666;
+            font-size: 0.95em;
+            border-radius: 5px;
+            font-style: italic;
+        `;
+        resultCard.appendChild(disclaimer);
+        
+        // Add medication button
+        const addButton = document.createElement('button');
+        addButton.textContent = '+ Add to My Medications';
+        addButton.style.cssText = `
+            margin-top: 2vh;
+            padding: 1.5vh 3vw;
+            background-color: #ff5869;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        `;
+        addButton.onmouseover = () => {
+            addButton.style.backgroundColor = '#ff4056';
+            addButton.style.transform = 'translateY(-2px)';
+            addButton.style.boxShadow = '0 4px 15px rgba(255, 88, 105, 0.3)';
+        };
+        addButton.onmouseout = () => {
+            addButton.style.backgroundColor = '#ff5869';
+            addButton.style.transform = 'translateY(0)';
+            addButton.style.boxShadow = 'none';
+        };
+        addButton.onclick = () => openDosageModal(drugData);
+        resultCard.appendChild(addButton);
+        
+    } else {
+        const noEffects = document.createElement('p');
+        noEffects.textContent = 'ℹ️ No menstrual side effects reported for this medication in our database.';
+        noEffects.style.cssText = `
+            color: #666;
+            font-size: 1.1em;
+            padding: 2vh;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            text-align: center;
+        `;
+        resultCard.appendChild(noEffects);
+    }
+    
+    medicationList.appendChild(resultCard);
 }
 
 // Open dosage modal
-function openDosageModal(medName) {
-    selectedMedication = medName;
-    selectedMedName.textContent = medName;
+function openDosageModal(drugData) {
+    selectedMedication = drugData.drug_name;
+    selectedMedName.textContent = drugData.drug_name;
     
-    // Display side effects
-    sideEffectsText.textContent = medications[medName] || "No side effect information available.";
+    // Display menstrual effects
+    displayMenstrualEffectsInModal(drugData);
     
-    // Load existing dosage if available
-    if (userMedications[medName]) {
-        dosageAmount.value = userMedications[medName].amount;
-        dosageUnit.value = userMedications[medName].unit;
-        dosageFrequency.value = userMedications[medName].frequency || '';
-    } else {
-        dosageAmount.value = '';
-        dosageUnit.value = '';
-        dosageFrequency.value = '';
-    }
+    // Clear form
+    dosageAmount.value = '';
+    dosageUnit.value = '';
+    dosageFrequency.value = '';
     
     dosageModal.style.display = 'block';
-    console.log('Modal opened for:', medName);
+    console.log('Modal opened for:', drugData.drug_name);
+}
+
+// Display menstrual effects in modal
+function displayMenstrualEffectsInModal(drugData) {
+    menstrualEffectsList.innerHTML = '';
+    
+    if (!drugData.menstrual_effects || drugData.menstrual_effects.length === 0) {
+        menstrualEffectsList.innerHTML = '<p style="color: #666;">ℹ️ No menstrual effects reported for this medication in our database.</p>';
+        return;
+    }
+    
+    const effectsTitle = document.createElement('h4');
+    effectsTitle.textContent = `Reported Menstrual Effects (${drugData.effect_count}):`;
+    effectsTitle.style.marginBottom = '1vh';
+    effectsTitle.style.color = '#ff5869';
+    menstrualEffectsList.appendChild(effectsTitle);
+    
+    const effectsUl = document.createElement('ul');
+    effectsUl.style.listStyleType = 'disc';
+    effectsUl.style.paddingLeft = '2vh';
+    effectsUl.style.margin = '0';
+    
+    drugData.menstrual_effects.forEach(effect => {
+        const li = document.createElement('li');
+        li.textContent = effect;
+        li.style.marginBottom = '0.5vh';
+        li.style.color = '#333';
+        effectsUl.appendChild(li);
+    });
+    
+    menstrualEffectsList.appendChild(effectsUl);
+    
+    const disclaimer = document.createElement('p');
+    disclaimer.textContent = 'Note: These effects are based on adverse event reports and may not occur in all patients.';
+    disclaimer.style.fontSize = '0.9em';
+    disclaimer.style.color = '#999';
+    disclaimer.style.marginTop = '1vh';
+    disclaimer.style.fontStyle = 'italic';
+    menstrualEffectsList.appendChild(disclaimer);
 }
 
 // Close dosage modal
@@ -143,39 +249,87 @@ function closeDosageModal() {
     console.log('Modal closed');
 }
 
-// Save dosage (locally only - no database)
-saveDosageBtn.addEventListener('click', () => {
+// Save dosage to database
+async function saveDosageToDatabase(medication, amount, unit, frequency) {
+    try {
+        const response = await fetch('http://localhost:3000/api/user-medications', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                medication: medication,
+                amount: amount,
+                unit: unit,
+                frequency: frequency
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save medication');
+        }
+        
+        const result = await response.json();
+        console.log('Saved to database:', result);
+        alert('✅ Medication saved successfully!');
+        return result;
+    } catch (error) {
+        console.error('Error saving medication:', error);
+        
+        if (error.message.includes('redirect') || error.message.includes('login')) {
+            alert('⚠️ Please log in to save medications.');
+            window.location.href = '/login';
+        } else {
+            alert('❌ Failed to save medication: ' + error.message);
+        }
+    }
+}
+
+// Save dosage button
+saveDosageBtn.addEventListener('click', async () => {
     if (selectedMedication && dosageAmount.value && dosageUnit.value && dosageFrequency.value) {
-        // Save locally
-        userMedications[selectedMedication] = {
-            amount: dosageAmount.value,
-            unit: dosageUnit.value,
-            frequency: dosageFrequency.value,
-            sideEffects: medications[selectedMedication]
-        };
+        console.log('Saving medication:', selectedMedication);
         
-        console.log('Medication saved:', selectedMedication, userMedications[selectedMedication]);
-        console.log('All saved medications:', userMedications);
-        
-        alert(`✅ ${selectedMedication} logged!\n${dosageAmount.value}${dosageUnit.value} - ${dosageFrequency.value}`);
+        await saveDosageToDatabase(
+            selectedMedication, 
+            dosageAmount.value, 
+            dosageUnit.value,
+            dosageFrequency.value
+        );
         
         closeDosageModal();
     } else {
-        alert('Please fill in all fields');
+        alert('⚠️ Please fill in all fields (dose, unit, and frequency)');
     }
 });
 
 // Search functionality
-function searchMedications() {
-    const searchTerm = medicationSearch.value.toLowerCase();
-    const filtered = medicationNames.filter(med => 
-        med.toLowerCase().includes(searchTerm)
-    );
-    displayMedications(filtered);
+async function searchMedication() {
+    const searchTerm = medicationSearch.value.trim();
+    
+    if (!searchTerm) {
+        medicationList.innerHTML = '<p style="text-align: center; color: #ff5869; padding: 3vh;">⚠️ Please enter a medication name</p>';
+        return;
+    }
+    
+    // Show loading state
+    medicationList.innerHTML = '<p style="text-align: center; color: #666; padding: 3vh;">🔄 Searching for menstrual effects...</p>';
+    
+    // Fetch and display results
+    const drugData = await fetchMenstrualEffects(searchTerm);
+    displaySearchResult(drugData);
 }
 
-medicationSearch.addEventListener('input', searchMedications);
-searchBtn.addEventListener('click', searchMedications);
+// Search on button click
+searchBtn.addEventListener('click', searchMedication);
+
+// Search on Enter key
+medicationSearch.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        searchMedication();
+    }
+});
 
 // Close modal when clicking outside
 dosageModal.addEventListener('click', (e) => {
@@ -184,7 +338,4 @@ dosageModal.addEventListener('click', (e) => {
     }
 });
 
-// Initialize - display all medications on page load
-console.log('Initializing medication search...');
-console.log('Total medications available:', medicationNames.length);
-displayMedications(medicationNames);
+console.log('✅ Medication search initialized - ready to search database');

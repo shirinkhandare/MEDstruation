@@ -9,7 +9,7 @@ const path = require('path');
 
 const cleanURI = process.env.MONGODB_URI ? process.env.MONGODB_URI.trim() : "";
 mongoose.connect(process.env.MONGODB_URI, {
-    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    serverSelectionTimeoutMS: 5000,
 })
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => {
@@ -113,27 +113,23 @@ app.get('/login', (req, res) => {
 // USER AUTH ROUTES
 // ============================================
 
-// Register new user
 app.post('/api/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
         
         console.log('Registration attempt:', { username, email });
         
-        // Check if user already exists
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) {
             console.log('User already exists');
             return res.status(400).json({ error: 'User already exists' });
         }
         
-        // Create new user
         const user = new User({ username, email, password });
         await user.save();
         
         console.log('User created successfully:', user._id);
         
-        // Log them in automatically
         req.session.userId = user._id;
         req.session.username = user.username;
         
@@ -146,24 +142,20 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// Login user
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         
-        // Find user
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         
-        // Check password
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         
-        // Create session
         req.session.userId = user._id;
         req.session.username = user.username;
         
@@ -174,13 +166,11 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// Logout
 app.post('/api/logout', (req, res) => {
     req.session.destroy();
     res.json({ success: true });
 });
 
-// Get current user info
 app.get('/api/user', isAuthenticated, async (req, res) => {
     try {
         const user = await User.findById(req.session.userId).select('-password');
@@ -251,19 +241,17 @@ app.get('/api/drug/:drugName', async (req, res) => {
 // USER MEDICATION ROUTES
 // ============================================
 
-// Save user's medication and dosage
 app.post('/api/user-medications', isAuthenticated, async (req, res) => {
     try {
-        const { medication, amount, unit, frequency } = req.body;  // ADD frequency
+        const { medication, amount, unit, frequency } = req.body;
         const userId = req.session.userId;
         
-        // Check if user already has this medication, update if so
         const existing = await UserMedication.findOne({ userId, medication });
         
         if (existing) {
             existing.amount = amount;
             existing.unit = unit;
-            existing.frequency = frequency;  // ADD THIS LINE
+            existing.frequency = frequency;
             await existing.save();
             res.json({ message: 'Medication updated', data: existing });
         } else {
@@ -272,7 +260,7 @@ app.post('/api/user-medications', isAuthenticated, async (req, res) => {
                 medication,
                 amount,
                 unit,
-                frequency  // ADD THIS LINE
+                frequency
             });
             await userMed.save();
             res.status(201).json({ message: 'Medication saved', data: userMed });
@@ -283,7 +271,6 @@ app.post('/api/user-medications', isAuthenticated, async (req, res) => {
     }
 });
 
-// Get user's medications
 app.get('/api/user-medications', isAuthenticated, async (req, res) => {
     try {
         const userMeds = await UserMedication.find({ userId: req.session.userId });
@@ -294,7 +281,6 @@ app.get('/api/user-medications', isAuthenticated, async (req, res) => {
     }
 });
 
-// Delete a user medication
 app.delete('/api/user-medications/:id', isAuthenticated, async (req, res) => {
     try {
         await UserMedication.findByIdAndDelete(req.params.id);
@@ -306,69 +292,11 @@ app.delete('/api/user-medications/:id', isAuthenticated, async (req, res) => {
 });
 
 // ============================================
-// NEW: MEDICATION DATABASE ENDPOINTS
-// ============================================
-
-// Get all medications from drug_database (sorted alphabetically)
-app.get('/api/medications', async (req, res) => {
-    try {
-        const drugDb = mongoose.connection.useDb('drug_database');
-        const MenstrualEffect = drugDb.model('MenstrualEffect', new mongoose.Schema({
-            drug_name: String,
-            menstrual_effects: [String],
-            effect_count: Number
-        }), 'menstrual_effects');
-        
-        const drugs = await MenstrualEffect.find({}, { drug_name: 1, _id: 0 })
-            .sort({ drug_name: 1 });
-        
-        const drugNames = drugs.map(d => d.drug_name);
-        console.log(`✅ Fetched ${drugNames.length} medications from drug_database`);
-        res.json(drugNames);
-    } catch (error) {
-        console.error('Error fetching medications:', error);
-        res.status(500).json({ error: 'Failed to fetch medications' });
-    }
-});
-
-// Get specific drug's menstrual effects
-app.get('/api/drug/:drugName', async (req, res) => {
-    try {
-        const drugName = req.params.drugName.toUpperCase();
-        
-        const drugDb = mongoose.connection.useDb('drug_database');
-        const MenstrualEffect = drugDb.model('MenstrualEffect', new mongoose.Schema({
-            drug_name: String,
-            menstrual_effects: [String],
-            effect_count: Number
-        }), 'menstrual_effects');
-        
-        const drug = await MenstrualEffect.findOne({ drug_name: drugName });
-        
-        if (!drug) {
-            return res.status(404).json({ error: 'Drug not found' });
-        }
-        
-        console.log(`✅ Found ${drug.effect_count} menstrual effects for ${drugName}`);
-        
-        res.json({
-            drug_name: drug.drug_name,
-            menstrual_effects: drug.menstrual_effects,
-            effect_count: drug.effect_count
-        });
-    } catch (error) {
-        console.error('Error fetching drug effects:', error);
-        res.status(500).json({ error: 'Failed to fetch drug effects' });
-    }
-});
-
-// ============================================
 // PYTHON BRIDGE
 // ============================================
 
 app.get('/drug_menstrual_effects', (req, res) => {
     const drugName = req.query.name;
-    // 1. Start Python with the drug name argument
     const pythonProcess = spawn('python', ['OpenFDA_API.py', drugName]);
 
     let pythonData = "";
