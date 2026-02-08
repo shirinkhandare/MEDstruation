@@ -54,7 +54,7 @@ function displaySearchResult(drugData) {
     if (drugData.notFound) {
         medicationList.innerHTML = `
             <div style="text-align: center; padding: 3vh;">
-                <h3 style="color: #666; margin-bottom: 2vh;">⚠️ Medication Not Found</h3>
+                <h3 style="color: #666; margin-bottom: 2vh;">Medication Not Found</h3>
                 <p style="color: #999;">"${drugData.drug_name}" is not in our database of ${374} medications with menstrual side effects.</p>
                 <p style="color: #999; margin-top: 1vh;">This could mean:</p>
                 <ul style="list-style: none; padding: 0; color: #999;">
@@ -94,7 +94,7 @@ function displaySearchResult(drugData) {
     // Menstrual effects section
     if (drugData.menstrual_effects && drugData.menstrual_effects.length > 0) {
         const effectsTitle = document.createElement('h3');
-        effectsTitle.textContent = `⚠️ Reported Menstrual Side Effects (${drugData.effect_count})`;
+        effectsTitle.textContent = `Reported Menstrual Side Effects (${drugData.effect_count})`;
         effectsTitle.style.cssText = `
             color: #333;
             margin-top: 2vh;
@@ -172,7 +172,7 @@ function displaySearchResult(drugData) {
         
     } else {
         const noEffects = document.createElement('p');
-        noEffects.textContent = 'ℹ️ No menstrual side effects reported for this medication in our database.';
+        noEffects.textContent = 'ℹNo menstrual side effects reported for this medication in our database.';
         noEffects.style.cssText = `
             color: #666;
             font-size: 1.1em;
@@ -209,7 +209,7 @@ function displayMenstrualEffectsInModal(drugData) {
     menstrualEffectsList.innerHTML = '';
     
     if (!drugData.menstrual_effects || drugData.menstrual_effects.length === 0) {
-        menstrualEffectsList.innerHTML = '<p style="color: #666;">ℹ️ No menstrual effects reported for this medication in our database.</p>';
+        menstrualEffectsList.innerHTML = '<p style="color: #666;">ℹNo menstrual effects reported for this medication in our database.</p>';
         return;
     }
     
@@ -278,10 +278,10 @@ async function saveDosageToDatabase(medication, amount, unit, frequency) {
         console.error('Error saving medication:', error);
         
         if (error.message.includes('redirect') || error.message.includes('login')) {
-            alert('⚠️ Please log in to save medications.');
+            alert('Please log in to save medications.');
             window.location.href = '/login';
         } else {
-            alert('❌ Failed to save medication: ' + error.message);
+            alert('Failed to save medication: ' + error.message);
         }
     }
 }
@@ -300,7 +300,7 @@ saveDosageBtn.addEventListener('click', async () => {
         
         closeDosageModal();
     } else {
-        alert('⚠️ Please fill in all fields (dose, unit, and frequency)');
+        alert('Please fill in all fields (dose, unit, and frequency)');
     }
 });
 
@@ -309,12 +309,12 @@ async function searchMedication() {
     const searchTerm = medicationSearch.value.trim();
     
     if (!searchTerm) {
-        medicationList.innerHTML = '<p style="text-align: center; color: #ff5869; padding: 3vh;">⚠️ Please enter a medication name</p>';
+        medicationList.innerHTML = '<p style="text-align: center; color: #ff5869; padding: 3vh;">Please enter a medication name</p>';
         return;
     }
     
     // Show loading state
-    medicationList.innerHTML = '<p style="text-align: center; color: #666; padding: 3vh;">🔄 Searching for menstrual effects...</p>';
+    medicationList.innerHTML = '<p style="text-align: center; color: #666; padding: 3vh;">Searching for menstrual effects...</p>';
     
     // Fetch and display results
     const drugData = await fetchMenstrualEffects(searchTerm);
@@ -338,4 +338,4 @@ dosageModal.addEventListener('click', (e) => {
     }
 });
 
-console.log('✅ Medication search initialized - ready to search database');
+console.log('Medication search initialized - ready to search database');

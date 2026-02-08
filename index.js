@@ -11,9 +11,9 @@ const cleanURI = process.env.MONGODB_URI ? process.env.MONGODB_URI.trim() : "";
 mongoose.connect(process.env.MONGODB_URI, {
     serverSelectionTimeoutMS: 5000,
 })
-    .then(() => console.log('✅ Connected to MongoDB'))
+    .then(() => console.log('Connected to MongoDB'))
     .catch(err => {
-        console.error('❌ MongoDB connection error:', err.message);
+        console.error('MongoDB connection error:', err.message);
         console.error('Check your MONGODB_URI in .env file');
     });
 
@@ -198,7 +198,7 @@ app.get('/api/medications', async (req, res) => {
             .sort({ drug_name: 1 });
         
         const drugNames = drugs.map(d => d.drug_name);
-        console.log(`✅ Fetched ${drugNames.length} medications from drug_database`);
+        console.log(`Fetched ${drugNames.length} medications from drug_database`);
         res.json(drugNames);
     } catch (error) {
         console.error('Error fetching medications:', error);
@@ -224,7 +224,7 @@ app.get('/api/drug/:drugName', async (req, res) => {
             return res.status(404).json({ error: 'Drug not found' });
         }
         
-        console.log(`✅ Found ${drug.effect_count} menstrual effects for ${drugName}`);
+        console.log(`Found ${drug.effect_count} menstrual effects for ${drugName}`);
         
         res.json({
             drug_name: drug.drug_name,
