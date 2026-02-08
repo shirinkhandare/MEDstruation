@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>MEDstruation Sign Up</title>
     <link rel="stylesheet" href="styles.css">
@@ -11,32 +12,32 @@
             padding: 20px;
             background-color: #FFCFCF;
         }
-        
+
         h1 {
             text-align: center;
             color: white;
             font-size: 3em;
             margin-bottom: 10px;
         }
-        
+
         h2 {
             text-align: center;
             color: white;
             font-weight: normal;
             margin-bottom: 30px;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
             color: #333;
         }
-        
+
         input[type="text"],
         input[type="email"],
         input[type="password"],
@@ -51,7 +52,7 @@
             box-sizing: border-box;
             background-color: white;
         }
-        
+
         button {
             width: 100%;
             padding: 12px;
@@ -64,11 +65,11 @@
             margin-top: 10px;
             font-weight: bold;
         }
-        
+
         button:hover {
             background-color: #e54d5e;
         }
-        
+
         #error {
             color: #d32f2f;
             background-color: #ffebee;
@@ -77,7 +78,7 @@
             margin-bottom: 10px;
             display: none;
         }
-        
+
         #success {
             color: #2e7d32;
             background-color: #e8f5e9;
@@ -86,7 +87,7 @@
             margin-bottom: 10px;
             display: none;
         }
-        
+
         .profile-pic-preview {
             max-width: 150px;
             max-height: 150px;
@@ -95,36 +96,37 @@
             border-radius: 50%;
             border: 3px solid white;
         }
-        
+
         .optional {
             color: #666;
             font-size: 12px;
             font-weight: normal;
         }
-        
+
         p {
             text-align: center;
             color: #333;
         }
-        
+
         a {
             color: #ff5869;
             text-decoration: none;
             font-weight: bold;
         }
-        
+
         a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <h1>MEDstruation</h1>
     <h2>Signup Page</h2>
-    
+
     <div id="error"></div>
     <div id="success"></div>
-    
+
     <form id="signupForm">
         <div class="form-group">
             <label for="username">Username</label>
@@ -164,16 +166,16 @@
 
         <button type="submit">Sign Up</button>
     </form>
-    
+
     <p><a href="/login">Already have an account? Login</a></p>
 
     <script>
         // Preview profile picture
-        document.getElementById('profilePicture').addEventListener('change', function(e) {
+        document.getElementById('profilePicture').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     const preview = document.getElementById('preview');
                     preview.src = event.target.result;
                     preview.style.display = 'block';
@@ -184,12 +186,12 @@
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const errorDiv = document.getElementById('error');
             const successDiv = document.getElementById('success');
             errorDiv.style.display = 'none';
             successDiv.style.display = 'none';
-            
+
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -199,13 +201,13 @@
 
             // Transfer user data to session storage
             sessionStorage.setItem('currentUser', username);
-            
+
             // Get profile picture as base64
             let profilePicture = '';
             const fileInput = document.getElementById('profilePicture');
             if (fileInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = async function(e) {
+                reader.onload = async function (e) {
                     profilePicture = e.target.result;
                     await submitForm();
                 };
@@ -219,23 +221,31 @@
                     const response = await fetch('/api/register', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            username, 
-                            email, 
-                            password, 
+                        body: JSON.stringify({
+                            username,
+                            email,
+                            password,
                             dateOfBirth,
                             weight: weight ? Number(weight) : null,
                             height: height ? Number(height) : null,
                             profilePicture
                         })
                     });
-                    
-                    const data = await response.json();
-                    
+
+                    const rawText = await response.text();
+                    let data = {};
+                    try {
+                        data = rawText ? JSON.parse(rawText) : {};
+                    } catch {
+                        console.warn('Response not valid JSON:', rawText);
+                    }
+
+                    console.log('Response status:', response.status);
+console.log('Response data:', data);
                     if (response.ok) {
                         successDiv.textContent = 'Registration successful! Redirecting...';
                         successDiv.style.display = 'block';
-                        setTimeout(() => window.location.href = '/mymed', 1500);
+                        setTimeout(() => window.location.href = '/mymed.html', 1500);
                     } else {
                         errorDiv.textContent = data.error || 'Registration failed';
                         errorDiv.style.display = 'block';
@@ -249,4 +259,5 @@
         });
     </script>
 </body>
+
 </html>
