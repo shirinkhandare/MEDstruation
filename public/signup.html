@@ -232,20 +232,17 @@
                         })
                     });
 
-                    const rawText = await response.text();
                     let data = {};
                     try {
-                        data = rawText ? JSON.parse(rawText) : {};
+                        data = await response.json();
                     } catch {
-                        console.warn('Response not valid JSON:', rawText);
+                        console.warn('No JSON returned from server');
                     }
 
-                    console.log('Response status:', response.status);
-console.log('Response data:', data);
                     if (response.ok) {
                         successDiv.textContent = 'Registration successful! Redirecting...';
                         successDiv.style.display = 'block';
-                        setTimeout(() => window.location.href = '/mymed.html', 1500);
+                        setTimeout(() => window.location.href = '/mymed', 1500);
                     } else {
                         errorDiv.textContent = data.error || 'Registration failed';
                         errorDiv.style.display = 'block';
@@ -256,7 +253,6 @@ console.log('Response data:', data);
                     errorDiv.style.display = 'block';
                 }
             }
-        });
     </script>
 </body>
 
