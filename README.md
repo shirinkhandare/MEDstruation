@@ -47,7 +47,7 @@ To view the site locally:
 
 # Challenges We Faced
 
-During the course of this Hackathon, we experienced more challenges than we had previously thought possible in a 36 hour time limit. Implementing the database into the rest of the stack caused several issues, as servers stopped, links failed, and code that had previously worked flawlessly gave up entirely. still working on...
+During the course of this Hackathon, we experienced more challenges than we had previously thought possible in a 36 hour time limit. Implementing the database into the rest of the stack caused several issues, as servers stopped, links failed, and code that had previously worked flawlessly gave up entirely. It took quite a bit of debugging to fix this.
 
 Additionally, managing user input without a exclusive database led to issues creating a sign-in and login. We managed to get by utilizing localStorage, but a more refined method is something we hope to implement in the future.
 
@@ -125,16 +125,16 @@ The database already has 374 drugs with menstrual side effects. You only need to
 # Credits
 
 ## Team Members
--Nandin-Erdene Molomjamts 
--Lan Nguyen
--Shirin Khandare
--Veronika Makowski
+- Nandin-Erdene Molomjamts 
+- Lan Nguyen
+- Shirin Khandare
+- Veronika Makowski
 
 ## Resources
--[ https://youtu.be/dNxxTenLGrg?si=DG8fsWjFsDdtv9GR](https://youtu.be/dNxxTenLGrg)
--[https://youtu.be/9LMOx7ojGhQ](https://youtu.be/9LMOx7ojGhQ)
--[https://www.youtube.com/watch?v=_ahKLvtH9w4&pp=0gcJCZEKAYcqIYzv](https://www.youtube.com/watch?v=_ahKLvtH9w4&pp=0gcJCZEKAYcqIYzv)
--[https://www.youtube.com/watch?v=oRbLowjKVzI&t=92s](https://www.youtube.com/watch?v=oRbLowjKVzI&t=92s)
--[https://www.youtube.com/watch?v=OcncrLyddAs](https://www.youtube.com/watch?v=OcncrLyddAs)
--[https://www.youtube.com/watch?v=vY2xUc4TVmY](https://www.youtube.com/watch?v=vY2xUc4TVmY)
+- [ https://youtu.be/dNxxTenLGrg?si=DG8fsWjFsDdtv9GR](https://youtu.be/dNxxTenLGrg)
+- [https://youtu.be/9LMOx7ojGhQ](https://youtu.be/9LMOx7ojGhQ)
+- [https://www.youtube.com/watch?v=_ahKLvtH9w4&pp=0gcJCZEKAYcqIYzv](https://www.youtube.com/watch?v=_ahKLvtH9w4&pp=0gcJCZEKAYcqIYzv)
+- [https://www.youtube.com/watch?v=oRbLowjKVzI&t=92s](https://www.youtube.com/watch?v=oRbLowjKVzI&t=92s)
+- [https://www.youtube.com/watch?v=OcncrLyddAs](https://www.youtube.com/watch?v=OcncrLyddAs)
+- [https://www.youtube.com/watch?v=vY2xUc4TVmY](https://www.youtube.com/watch?v=vY2xUc4TVmY)
 # Licensing 
